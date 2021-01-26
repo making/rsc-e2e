@@ -35,3 +35,11 @@ jobs:
         docker pull ${DOCKER_REGISTRY}
         set -e
         mvn -V spring-boot:build-image -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY} -Dspring-boot.build-image.publish=true -Dmaven.test.skip=true
+        mkdir dist
+        cp target/classes/rsc-e2e* ./dist/rsc-e2e-${{ runner.os }}
+        chmod +x ./dist/rsc-e2e-${{ runner.os }}
+    - name: upload-dist
+      uses: actions/upload-artifact@v1
+      with:
+        name: dist
+        path: dist
