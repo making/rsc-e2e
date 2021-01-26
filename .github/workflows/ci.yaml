@@ -37,6 +37,7 @@ jobs:
         DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       run: |
         set +e
+        gu install native-image
         docker pull ${DOCKER_REGISTRY}
         set -e
         mvn -V spring-boot:build-image -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY} -Dspring-boot.build-image.publish=true -Dmaven.test.skip=true
