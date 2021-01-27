@@ -47,6 +47,11 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
+    - name: mvn test
+      if: runner.os == 'macOS'
+      run: |
+        brew install making/tap/rsc
+        mvn test
     - name: mvn package
       run: |
         mkdir dist
