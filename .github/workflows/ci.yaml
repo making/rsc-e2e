@@ -14,14 +14,15 @@ jobs:
         os:
         - ubuntu-latest
         - macos-latest
+        - windows-latest
         gu-binary: [gu, gu.cmd]
         exclude:
         - os: ubuntu-latest
           gu-binary: gu.cmd
         - os: macos-latest
           gu-binary: gu.cmd
-        #- os: windows-latest
-        #  gu-binary: gu
+        - os: windows-latest
+          gu-binary: gu
     steps:
     - uses: actions/checkout@v2
     - uses: DeLaGuardo/setup-graalvm@master
@@ -39,7 +40,7 @@ jobs:
     - name: mvn test
       run: |
         set -ex
-        ./mvnw -V test
+        mvn -V test
     - name: mvn package
       if: github.ref == 'refs/heads/main'
       run: |
