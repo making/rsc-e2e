@@ -13,19 +13,19 @@ jobs:
       matrix:
         include:
         - os: ubuntu-latest
-          file: rsc-x86_64-pc-linux
+          file: rsc-e2e-x86_64-pc-linux
           classifier: linux-x86_64
           move: mv
           separator: /
           extension: ""
         - os: windows-latest
-          file: rsc-x86_64-pc-win32.exe
+          file: rsc-e2e-x86_64-pc-win32.exe
           classifier: windows-x86_64
           move: move
           separator: \
           extension: .exe
         - os: macos-latest
-          file: rsc-x86_64-apple-darwin
+          file: rsc-e2e-x86_64-apple-darwin
           classifier: osx-x86_64
           move: mv
           separator: /
@@ -51,7 +51,7 @@ jobs:
       run: |
         mkdir dist
         mvn -DskipTests -V package -P native
-        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-${{ matrix.classifier }}${{ matrix.extension }} dist${{ matrix.separator }}${{ matrix.file }}
+        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-e2e-${{ matrix.classifier }}${{ matrix.extension }} dist${{ matrix.separator }}${{ matrix.file }}
     - name: upload-dist
       uses: actions/upload-artifact@v1
       with:
