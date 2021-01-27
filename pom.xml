@@ -98,11 +98,11 @@
 					<plugin>
 						<groupId>org.graalvm.nativeimage</groupId>
 						<artifactId>native-image-maven-plugin</artifactId>
-						<version>21.0.0</version>
+						<version>20.3.1</version>
 						<configuration>
 							<mainClass>am.ik.rsocket.RscE2eApplication</mainClass>
 							<buildArgs>${native-build.args}</buildArgs>
-							<imageName>${project.artifactId}</imageName>
+							<imageName>${project.artifactId}-${os.detected.classifier}</imageName>
 							<outputDirectory>${basedir}/target/classes</outputDirectory>
 						</configuration>
 						<executions>
