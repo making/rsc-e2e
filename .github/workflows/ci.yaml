@@ -48,7 +48,7 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: mvn test
-      if: runner.os == 'macOS'
+      if: runner.os != 'Windows'
       run: |
         brew install making/tap/rsc
         mvn test
