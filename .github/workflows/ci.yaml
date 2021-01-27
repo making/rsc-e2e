@@ -50,7 +50,9 @@ jobs:
     - name: mvn test
       if: runner.os != 'Windows'
       run: |
+        set -ex
         brew install making/tap/rsc
+        export RSC_PATH=`which rsc`
         mvn test
     - name: mvn package
       run: |
