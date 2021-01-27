@@ -29,7 +29,7 @@ class RscE2eApplicationTests {
 	@Autowired
 	RscProps rscProps;
 
-	final CommandRunner commandRunner = new CommandRunner(new File("."));
+	final CommandRunner commandRunner = new CommandRunner(new File(System.getProperty("user.dir")));
 
 	String[] command(String... command) {
 		final List<String> list = new ArrayList<>();
