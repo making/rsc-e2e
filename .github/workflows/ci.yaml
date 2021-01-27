@@ -43,7 +43,7 @@ jobs:
     - name: mvn package
       if: github.ref == 'refs/heads/main'
       run: |
-        mvn -V package -Dmaven.test.skip=true
+        mvn -V package -Pnative -Dmaven.test.skip=true
         mkdir dist
         cp target/classes/rsc-e2e* ./dist/rsc-e2e-${{ runner.os }}
         chmod +x ./dist/rsc-e2e-${{ runner.os }}
