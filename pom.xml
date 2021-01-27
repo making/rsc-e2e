@@ -23,6 +23,7 @@
 			-Dspring.spel.ignore=true
 			-Dspring.xml.ignore=true
 			-Dfile.encoding=UTF-8
+			-H:NativeLinkerOption=prefs.lib
 		</native-build.args>
 	</properties>
 	<dependencies>
