@@ -16,14 +16,17 @@ jobs:
           file: rsc-x86_64-pc-linux
           args: --best --lzma
           strip: true
+          extention: ""
         - os: windows-latest
-          file: rsc-x86_64-pc-win32.exe
+          file: rsc-x86_64-pc-win32
           args: -9
           strip: false
+          extention: .exe
         - os: macos-latest
           file: rsc-x86_64-apple-darwin
           args: --best
           strip: true
+          extention: ""
     steps:
     - uses: actions/checkout@v2
     - uses: ayltai/setup-graalvm@v1
@@ -47,6 +50,6 @@ jobs:
         mvn -DskipTests -Dnative-build-dir=dist -Dnative-build-name=${{ matrix.file }} -V package -P native
     - uses: svenstaro/upx-action@v2
       with:
-        file: dist/${{ matrix.file }}
+        file: dist/${{ matrix.file }}${{ matrix.extention }}
         args: ${{ matrix.args }}
         strip: ${{ matrix.strip }}
