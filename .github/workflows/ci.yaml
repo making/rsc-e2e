@@ -13,7 +13,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: test
       run: |
-        wget https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -O rsc.exe
+        Invoke-WebRequest -Uri https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -outfile rsc.exe
         .\rsc.exe --version
         .\rsc.exe --showSystemProperties
         .\rsc.exe ws://rsocket-demo.herokuapp.com/rsocket --route searchTweets --stream -d Trump --take 3 --retry 3 --debug
