@@ -42,7 +42,6 @@ jobs:
         set -ex
         mvn -V test
     - name: mvn package
-      if: github.ref == 'refs/heads/main'
       run: |
         mvn -V package -Pnative -Dmaven.test.skip=true
         mkdir dist
