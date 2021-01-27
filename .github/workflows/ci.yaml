@@ -13,15 +13,15 @@ jobs:
       matrix:
         include:
         - os: ubuntu-latest
-          file: dist/rsc-x86_64-pc-linux
+          file: rsc-x86_64-pc-linux
           args: --best --lzma
           strip: true
         - os: windows-latest
-          file: dist/rsc-x86_64-pc-win32.exe
+          file: rsc-x86_64-pc-win32.exe
           args: -9
           strip: false
         - os: macos-latest
-          file: dist/rsc-x86_64-apple-darwin
+          file: rsc-x86_64-apple-darwin
           args: --best
           strip: true
     steps:
@@ -44,9 +44,9 @@ jobs:
     - name: mvn package
       run: |
         mkdir dist
-        mvn -DskipTests -Dnative-build.name=${{ matrix.file }} -V package -P native
+        mvn -DskipTests -Dnative-build-dir=dist -Dnative-build-name=${{ matrix.file }} -V package -P native
     - uses: svenstaro/upx-action@v2
       with:
-        file: ${{ matrix.file }}
+        file: dist/${{ matrix.file }}
         args: ${{ matrix.args }}
         strip: ${{ matrix.strip }}

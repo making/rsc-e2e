@@ -16,7 +16,8 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>1.8</java.version>
-		<native-build.name>${project.artifactId}-${os.detected.classifier}</native-build.name>
+		<native-image-name>${project.artifactId}-${os.detected.classifier}</native-image-name>
+		<native-image-dir>${basedir}/target/classes</native-image-dir>
 		<native-build.args>
 			--enable-all-security-services
 			--enable-https
@@ -103,8 +104,8 @@
 						<configuration>
 							<mainClass>am.ik.rsocket.RscE2eApplication</mainClass>
 							<buildArgs>${native-build.args}</buildArgs>
-							<imageName>${native-build.name}</imageName>
-							<outputDirectory>${basedir}/target/classes</outputDirectory>
+							<imageName>${native-image-name}</imageName>
+							<outputDirectory>${native-image-dir}</outputDirectory>
 						</configuration>
 						<executions>
 							<execution>
