@@ -13,19 +13,19 @@ jobs:
       matrix:
         include:
         - os: ubuntu-latest
-          file: rsc-e2e-x86_64-pc-linux
+          platform: x86_64-pc-linux
           classifier: linux-x86_64
           move: mv
           separator: /
           extension: ""
         - os: windows-latest
-          file: rsc-e2e-x86_64-pc-win32.exe
+          platform: x86_64-pc-win32
           classifier: windows-x86_64
           move: move
           separator: \
           extension: .exe
         - os: macos-latest
-          file: rsc-e2e-x86_64-apple-darwin
+          platform: x86_64-apple-darwin
           classifier: osx-x86_64
           move: mv
           separator: /
@@ -51,9 +51,17 @@ jobs:
       run: |
         mkdir dist
         mvn -DskipTests -V package -P native
-        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-e2e-${{ matrix.classifier }}${{ matrix.extension }} dist${{ matrix.separator }}${{ matrix.file }}
+        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-e2e-${{ matrix.classifier }}${{ matrix.extension }} dist${{ matrix.separator }}rsc-e2e-${{ matrix.platform }}${{ matrix.extension }}
     - name: upload-dist
       uses: actions/upload-artifact@v1
       with:
         name: dist
         path: dist
+    - name: mvn spring-boot:build-image
+      if: github.ref == 'refs/heads/main' && runner.os == 'Linux'
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      run: |
+        mvn -V spring-boot:build-image -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY} -Dspring-boot.build-image.publish=true -Dmaven.test.skip=true
