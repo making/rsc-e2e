@@ -39,4 +39,4 @@ jobs:
           ${{ runner.os }}-maven-
     - name: mvn package
       run: |
-        mvn -V package -Pnative
+        mvn -V test
