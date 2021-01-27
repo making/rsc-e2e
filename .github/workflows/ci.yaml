@@ -8,60 +8,15 @@ on:
     - main
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-        - os: ubuntu-latest
-          platform: x86_64-pc-linux
-          classifier: linux-x86_64
-          move: mv
-          separator: /
-          extension: ""
-        - os: windows-latest
-          platform: x86_64-pc-win32
-          classifier: windows-x86_64
-          move: move
-          separator: \
-          extension: .exe
-        - os: macos-latest
-          platform: x86_64-apple-darwin
-          classifier: osx-x86_64
-          move: mv
-          separator: /
-          extension: ""
+    runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: ayltai/setup-graalvm@v1
+    - uses: laughedelic/coursier-setup@v1
       with:
-        java-version: 8
-        graalvm-version: 20.3.1
-        native-image: true
-    - uses: ilammy/msvc-dev-cmd@v1.5.0
-      if: runner.os == 'Windows'
-    - uses: microsoft/setup-msbuild@v1
-      if: runner.os == 'Windows'
-    - uses: actions/cache@v1
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: mvn package
+        apps: rsc
+    - name: test
       run: |
-        mkdir dist
-        mvn -DskipTests -V package -P native
-        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-e2e-${{ matrix.classifier }}${{ matrix.extension }} dist${{ matrix.separator }}rsc-e2e-${{ matrix.platform }}${{ matrix.extension }}
-    - name: upload-dist
-      uses: actions/upload-artifact@v1
-      with:
-        name: dist
-        path: dist
-    - name: mvn spring-boot:build-image
-      if: github.ref == 'refs/heads/main' && runner.os == 'Linux'
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
-      run: |
-        mvn -V spring-boot:build-image -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY} -Dspring-boot.build-image.publish=true -Dmaven.test.skip=true
+        rsc --version
+        rsc --showSystemProperties
+        rsc ws://rsocket-demo.herokuapp.com/rsocket --route searchTweets --stream -d Trump --take 3 --retry 3 --debug
+        rsc wss://rsocket-demo.herokuapp.com/rsocket --route searchTweets --stream -d Trump --take 3 --retry 3 --debug
