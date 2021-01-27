@@ -39,5 +39,6 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: mvn package
+      shell: cmd
       run: |
         mvn -V package -P native
