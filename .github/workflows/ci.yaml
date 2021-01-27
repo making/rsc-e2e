@@ -11,12 +11,10 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: laughedelic/coursier-setup@v1
-      with:
-        apps: rsc --contrib
     - name: test
       run: |
-        rsc --version
-        rsc --showSystemProperties
-        rsc ws://rsocket-demo.herokuapp.com/rsocket --route searchTweets --stream -d Trump --take 3 --retry 3 --debug
-        rsc wss://rsocket-demo.herokuapp.com/rsocket --route searchTweets --stream -d Trump --take 3 --retry 3 --debug
+        wget https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -O rsc.exe
+        .\rsc.exe --version
+        .\rsc.exe --showSystemProperties
+        .\rsc.exe ws://rsocket-demo.herokuapp.com/rsocket --route searchTweets --stream -d Trump --take 3 --retry 3 --debug
+        .\rsc.exe wss://rsocket-demo.herokuapp.com/rsocket --route searchTweets --stream -d Trump --take 3 --retry 3 --debug
