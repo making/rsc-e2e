@@ -14,11 +14,22 @@ jobs:
         os:
         - ubuntu-latest
         - macos-latest
+        gu-binary: [gu, gu.cmd]
+        exclude:
+        - os: ubuntu-latest
+          gu-binary: gu.cmd
+        - os: macos-latest
+          gu-binary: gu.cmd
+        #- os: windows-latest
+        #  gu-binary: gu
     steps:
     - uses: actions/checkout@v2
     - uses: DeLaGuardo/setup-graalvm@master
       with:
         graalvm-version: '21.0.0.java8'
+    - name: install native-image
+      run: |
+        ${{ matrix.gu-binary }} install native-image
     - uses: actions/cache@v1
       with:
         path: ~/.m2/repository
@@ -29,18 +40,10 @@ jobs:
       run: |
         set -ex
         ./mvnw -V test
-    - name: mvn spring-boot:build-image
+    - name: mvn package
       if: github.ref == 'refs/heads/main'
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
       run: |
-        set +e
-        gu install native-image
-        docker pull ${DOCKER_REGISTRY}
-        set -e
-        mvn -V spring-boot:build-image -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY} -Dspring-boot.build-image.publish=true -Dmaven.test.skip=true
+        mvn -V package -Dmaven.test.skip=true
         mkdir dist
         cp target/classes/rsc-e2e* ./dist/rsc-e2e-${{ runner.os }}
         chmod +x ./dist/rsc-e2e-${{ runner.os }}
@@ -49,3 +52,11 @@ jobs:
       with:
         name: dist
         path: dist
+    - name: mvn spring-boot:build-image
+      if: github.ref == 'refs/heads/main' && runner.os == 'Linux'
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_REGISTRY: ${{ secrets.DOCKER_REGISTRY }}
+      run: |
+        mvn -V spring-boot:build-image -Dspring-boot.build-image.imageName=${DOCKER_REGISTRY} -Dspring-boot.build-image.publish=true -Dmaven.test.skip=true
