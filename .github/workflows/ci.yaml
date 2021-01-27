@@ -12,15 +12,15 @@ jobs:
     strategy:
       matrix:
         os:
-        - ubuntu-latest
-        - macos-latest
+        #- ubuntu-latest
+        #- macos-latest
         - windows-latest
         gu-binary: [gu, gu.cmd]
         exclude:
-        - os: ubuntu-latest
-          gu-binary: gu.cmd
-        - os: macos-latest
-          gu-binary: gu.cmd
+        #- os: ubuntu-latest
+        #  gu-binary: gu.cmd
+        #- os: macos-latest
+        #  gu-binary: gu.cmd
         - os: windows-latest
           gu-binary: gu
     steps:
@@ -31,6 +31,7 @@ jobs:
     - name: install native-image
       run: |
         ${{ matrix.gu-binary }} install native-image
+    - uses: ilammy/msvc-dev-cmd@v1        
     - uses: actions/cache@v1
       with:
         path: ~/.m2/repository
