@@ -39,7 +39,6 @@ jobs:
           ${{ runner.os }}-maven-
     - name: mvn test
       run: |
-        set -ex
         mvn -V test
     - name: mvn package
       run: |
