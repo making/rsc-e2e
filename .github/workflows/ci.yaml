@@ -51,7 +51,7 @@ jobs:
       run: |
         mkdir dist
         mvn -DskipTests -V package -P native
-        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-${{ matrix.classifier }}${{ matrix.extension }} dist{{ matrix.separator }}${{ matrix.file }}
+        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-${{ matrix.classifier }}${{ matrix.extension }} dist${{ matrix.separator }}${{ matrix.file }}
     - name: upload-dist
       uses: actions/upload-artifact@v1
       with:
