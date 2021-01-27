@@ -14,7 +14,7 @@ jobs:
         include:
         - os: ubuntu-latest
           file: rsc-x86_64-pc-linux
-          args: --best --lzma
+          args: -9 --lzma
           strip: true
           extention: ""
         - os: windows-latest
@@ -24,7 +24,7 @@ jobs:
           extention: .exe
         - os: macos-latest
           file: rsc-x86_64-apple-darwin
-          args: --best
+          args: -9
           strip: true
           extention: ""
     steps:
