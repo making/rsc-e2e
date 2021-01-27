@@ -14,19 +14,22 @@ jobs:
         include:
         - os: ubuntu-latest
           file: rsc-x86_64-pc-linux
-          args: -9 --lzma
-          strip: true
-          extention: ""
+          classifier: linux-x86_64
+          move: mv
+          separator: /
+          extension: ""
         - os: windows-latest
-          file: rsc-x86_64-pc-win32
-          args: -9
-          strip: false
-          extention: .exe
+          file: rsc-x86_64-pc-win32.exe
+          classifier: windows-x86_64
+          move: move
+          separator: \
+          extension: .exe
         - os: macos-latest
           file: rsc-x86_64-apple-darwin
-          args: -9
-          strip: true
-          extention: ""
+          classifier: osx-x86_64
+          move: mv
+          separator: /
+          extension: ""
     steps:
     - uses: actions/checkout@v2
     - uses: ayltai/setup-graalvm@v1
@@ -47,9 +50,10 @@ jobs:
     - name: mvn package
       run: |
         mkdir dist
-        mvn -DskipTests -Dnative-build-dir=dist -Dnative-build-name=${{ matrix.file }} -V package -P native
-    - uses: svenstaro/upx-action@v2
+        mvn -DskipTests -V package -P native
+        ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-${{ matrix.classifier }}${{ matrix.extension }} dist{{ matrix.separator }}${{ matrix.file }}
+    - name: upload-dist
+      uses: actions/upload-artifact@v1
       with:
-        file: dist/${{ matrix.file }}${{ matrix.extention }}
-        args: ${{ matrix.args }}
-        strip: ${{ matrix.strip }}
+        name: dist
+        path: dist
