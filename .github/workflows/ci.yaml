@@ -47,12 +47,19 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    - name: mvn test
+    - name: mvn test linux/mac
       if: runner.os != 'Windows'
       run: |
         set -ex
         brew install making/tap/rsc
         export RSC_PATH=`which rsc`
+        mvn test
+    - name: mvn test windows
+      if: runner.os == 'Windows'
+      env:
+        RSC_PATH: .\rsc.exe
+      run: |
+        Invoke-WebRequest -Uri https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -outfile rsc.exe
         mvn test
     - name: mvn package
       run: |
