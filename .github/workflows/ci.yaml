@@ -49,6 +49,9 @@ jobs:
           ${{ runner.os }}-maven-
     - name: mvn test linux/mac
       if: runner.os != 'Windows'
+      env:
+        RSC_OIDCUSERNAME: ${{ secrets.RSC_OIDCUSERNAME }}
+        RSC_OIDCPASSWORD: ${{ secrets.RSC_OIDCPASSWORD }}
       run: |
         set -ex
         brew install making/tap/rsc
@@ -58,15 +61,19 @@ jobs:
       if: runner.os == 'Windows'
       env:
         RSC_PATH: .\rsc.exe
+        RSC_OIDCUSERNAME: ${{ secrets.RSC_OIDCUSERNAME }}
+        RSC_OIDCPASSWORD: ${{ secrets.RSC_OIDCPASSWORD }}
       run: |
         Invoke-WebRequest -Uri https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -outfile rsc.exe
         mvn test
     - name: mvn package
+      if: runner.os != 'Windows'
       run: |
         mkdir dist
         mvn -DskipTests -V package -P native
         ${{ matrix.move }} target${{ matrix.separator }}classes${{ matrix.separator }}rsc-e2e-${{ matrix.classifier }}${{ matrix.extension }} dist${{ matrix.separator }}rsc-e2e-${{ matrix.platform }}${{ matrix.extension }}
     - name: upload-dist
+      if: runner.os != 'Windows'
       uses: actions/upload-artifact@v1
       with:
         name: dist

@@ -1,4 +1,4 @@
-package am.ik.rsocket;
+package am.ik.rsocket.uppercase;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
