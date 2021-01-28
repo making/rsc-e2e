@@ -54,6 +54,13 @@ jobs:
         brew install making/tap/rsc
         export RSC_PATH=`which rsc`
         mvn test
+    - name: mvn test windows
+      if: runner.os == 'Windows'
+      env:
+        RSC_PATH: .\rsc.exe
+      run: |
+        Invoke-WebRequest -Uri https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -outfile rsc.exe
+        mvn test
     - name: mvn package
       run: |
         mkdir dist
