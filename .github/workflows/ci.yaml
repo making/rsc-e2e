@@ -47,7 +47,7 @@ jobs:
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
         restore-keys: |
           ${{ runner.os }}-maven-
-    - name: mvn test
+    - name: mvn test linux/mac
       if: runner.os != 'Windows'
       run: |
         set -ex
