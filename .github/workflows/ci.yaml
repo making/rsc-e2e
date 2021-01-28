@@ -49,6 +49,9 @@ jobs:
           ${{ runner.os }}-maven-
     - name: mvn test linux/mac
       if: runner.os != 'Windows'
+      env:
+        RSC_OIDCUSERNAME: ${{ secrets.RSC_OIDCUSERNAME }}
+        RSC_OIDCPASSWORD: ${{ secrets.RSC_OIDCPASSWORD }}
       run: |
         set -ex
         brew install making/tap/rsc
@@ -58,6 +61,8 @@ jobs:
       if: runner.os == 'Windows'
       env:
         RSC_PATH: .\rsc.exe
+        RSC_OIDCUSERNAME: ${{ secrets.RSC_OIDCUSERNAME }}
+        RSC_OIDCPASSWORD: ${{ secrets.RSC_OIDCPASSWORD }}
       run: |
         Invoke-WebRequest -Uri https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -outfile rsc.exe
         mvn test
