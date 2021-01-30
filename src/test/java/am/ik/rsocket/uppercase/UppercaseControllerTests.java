@@ -1,10 +1,13 @@
 package am.ik.rsocket.uppercase;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
-import am.ik.rsocket.io.CommandRunner;
 import am.ik.rsocket.RscProps;
+import am.ik.rsocket.io.CommandRunner;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -89,5 +92,18 @@ class UppercaseControllerTests {
 				.matches(list -> list.stream().filter(s -> s.contains("Stream ID: 1 Type: NEXT")).count() == 1)
 				.anyMatch(s -> s.contains("Stream ID: 1 Type: REQUEST_N"))
 				.matches(list -> list.stream().filter(s -> s.contains("Stream ID: 1 Type: COMPLETE")).count() == 2);
+	}
+
+	@Test
+	void loadFile() throws Exception {
+		final Path path = Files.createTempFile("rsc", ".txt");
+		Files.write(path, Arrays.asList("Hello", "RSocket"));
+		final Flux<String> output = this.commandRunner.exec(this.rscProps.command("-r", "uppercase", "-l", "file://" + path.toAbsolutePath().toString(), "tcp://localhost:" + port)).log("rsc");
+		StepVerifier.create(output)
+				.expectNext("HELLO")
+				.expectNext("RSOCKET")
+				.expectNext("")
+				.verifyComplete();
+		Files.deleteIfExists(path);
 	}
 }
