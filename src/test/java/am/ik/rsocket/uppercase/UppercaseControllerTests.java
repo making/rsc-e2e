@@ -98,7 +98,11 @@ class UppercaseControllerTests {
 	void loadFile() throws Exception {
 		final Path path = Files.createTempFile("rsc", ".txt");
 		Files.write(path, Arrays.asList("Hello", "RSocket"));
-		final Flux<String> output = this.commandRunner.exec(this.rscProps.command("-r", "uppercase", "-l", "file://" + path.toAbsolutePath().toString(), "tcp://localhost:" + port)).log("rsc");
+		String tmpFile = "file://" + path.toAbsolutePath().toString();
+		if (!tmpFile.startsWith("/")) {
+			tmpFile = "/" + tmpFile; // for Windows
+		}
+		final Flux<String> output = this.commandRunner.exec(this.rscProps.command("-r", "uppercase", "-l", tmpFile, "tcp://localhost:" + port)).log("rsc");
 		StepVerifier.create(output)
 				.expectNext("HELLO")
 				.expectNext("RSOCKET")
