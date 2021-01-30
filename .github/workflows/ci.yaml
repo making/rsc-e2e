@@ -64,7 +64,7 @@ jobs:
         RSC_OIDCUSERNAME: ${{ secrets.RSC_OIDCUSERNAME }}
         RSC_OIDCPASSWORD: ${{ secrets.RSC_OIDCPASSWORD }}
       run: |
-        Invoke-WebRequest -Uri https://github.com/making/rsc/releases/download/0.7.3/rsc-x86_64-pc-win32.exe -outfile rsc.exe
+        Invoke-WebRequest -Uri https://github.com/making/rsc/releases/download/0.8.0/rsc-x86_64-pc-win32.exe -outfile rsc.exe
         mvn test
     - name: mvn package
       if: runner.os != 'Windows'
