@@ -40,7 +40,7 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	@Profile("default")
+	@Profile({ "default", "tls" })
 	public PayloadSocketAcceptorInterceptor authorization(RSocketSecurity rsocket) {
 		return rsocket
 				.authorizePayload(authorize -> authorize
