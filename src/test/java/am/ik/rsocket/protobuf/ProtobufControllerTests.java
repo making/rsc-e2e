@@ -33,7 +33,7 @@ class ProtobufControllerTests {
 		final String filePath = new ClassPathResource("data/request.protobuf").getFile().getAbsolutePath();
 		// https://github.com/spring-projects/spring-framework/pull/26487
 		final Flux<String> output = this.commandRunner.exec(this.rscProps.command("--route", "protobuf", "--dataMimeType", "application/octet-stream ", "--load", filePath, "tcp://localhost:" + port)).log("rsc");
-		StepVerifier.create(output.collect(Collectors.joining(System.lineSeparator()))
+		StepVerifier.create(output.collect(Collectors.joining("\n"))
 				.map(s -> {
 					try {
 						return HelloResponse.newBuilder()
