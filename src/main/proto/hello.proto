@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package am.ik.rsocket.protobuf;
+
+option java_package = "am.ik.rsocket.protobuf";
+option java_outer_classname = "HelloProto";
+option java_multiple_files = true;
+
+message HelloRequest {
+  string greeting = 1;
+}
+
+message HelloResponse {
+  string reply = 1;
+}
