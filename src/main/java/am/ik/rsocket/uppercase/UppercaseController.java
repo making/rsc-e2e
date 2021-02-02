@@ -14,21 +14,18 @@ public class UppercaseController {
 	private final Logger log = LoggerFactory.getLogger(UppercaseController.class);
 
 	@MessageMapping("uppercase.fnf")
-	public Mono<Void> fnf(@Payload String message) {
-		final String upperCase = message.toUpperCase();
-		return Mono.just(upperCase).log("uppercase.fnf").then();
+	public Mono<Void> fnf(@Payload Mono<String> message) {
+		return message.map(String::toUpperCase).log("uppercase.fnf").then();
 	}
 
 	@MessageMapping({ "uppercase", "uppercase.rr" })
-	public Mono<String> rr(@Payload String message) {
-		final String upperCase = message.toUpperCase();
-		return Mono.just(upperCase).log("uppercase.rr");
+	public Mono<String> rr(@Payload Mono<String> message) {
+		return message.map(String::toUpperCase).log("uppercase.rr");
 	}
 
 	@MessageMapping("uppercase.stream")
-	public Flux<String> stream(@Payload String message) {
-		final String upperCase = message.toUpperCase();
-		return Mono.just(upperCase).repeat().log("uppercase.stream");
+	public Flux<String> stream(@Payload Mono<String> message) {
+		return message.map(String::toUpperCase).cache().repeat().log("uppercase.stream");
 	}
 
 	@MessageMapping("uppercase.channel")
