@@ -22,12 +22,12 @@ class RscTests {
 	@Test
 	@Order(0)
 	void version() {
-		this.commandRunner.exec(this.rscProps.command("--version")).log("rsc");
+		this.commandRunner.exec(this.rscProps.command("--version")).log("rsc").collectList().block();
 	}
 
 	@Test
 	@Order(1)
 	void showSystemProperties() {
-		this.commandRunner.exec(this.rscProps.command("--showSystemProperties")).log("rsc");
+		this.commandRunner.exec(this.rscProps.command("--showSystemProperties")).log("rsc").collectList().block();
 	}
 }
